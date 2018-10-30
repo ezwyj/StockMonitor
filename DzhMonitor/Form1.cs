@@ -15,6 +15,24 @@ namespace DzhMonitor
         public Form1()
         {
             InitializeComponent();
+            comboBoxApp.SelectedIndex = 0;
+            comboBoxInvalidate.SelectedIndex = 0;
+            
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            this.Close();
+            Application.ExitThread();
+            Application.Exit();
+        }
+        
+        private void buttonStart_Click(object sender, EventArgs e)
+        {
+
+            var runObject = new MonitorCore.CoreAnalysis();
+            runObject.SetAppHandler(comboBoxApp.SelectedItem.ToString());
+
         }
     }
 }
