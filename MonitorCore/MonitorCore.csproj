@@ -54,7 +54,7 @@
   <ItemGroup>
     <Compile Include="BaiduHelper.cs" />
     <Compile Include="CoreAnalysis.cs" />
-    <Compile Include="Entity\CfgLocation.cs" />
+    <Compile Include="Entity\Market.cs" />
     <Compile Include="Entity\MonitorLocation.cs" />
     <Compile Include="Win32API.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -74,8 +74,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="cfg.json" />
     <None Include="packages.config" />
+    <None Include="stockList.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

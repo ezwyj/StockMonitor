@@ -47,7 +47,7 @@ namespace UnitTestProject
         [TestMethod]
         public void TestMethod1()
         {
-            var fileList = new string[] { "AA", "BB", "CC", "DD" };
+            var fileList = new string[] { "A", "B", "C", "D" };
             
 
             var client = new Baidu.Aip.Ocr.Ocr(BaiduHelper.API_KEY, BaiduHelper.SECRET_KEY);
@@ -83,7 +83,6 @@ namespace UnitTestProject
                     result = client.Accurate(image, AccurateOptions);
                     show = result["words_result"].ToList();
                     one = show.Where(a => a["words"].ToString().StartsWith("委买队列")).FirstOrDefault();
-                    buyone = show.Where(a => a["words"].ToString().StartsWith("买一")).FirstOrDefault();
                 }
                 if(one==null)
                 {
@@ -96,12 +95,6 @@ namespace UnitTestProject
                 int x = Convert.ToUInt16(one["location"]["left"].ToString());
                 int y = Convert.ToUInt16(one["location"]["top"].ToString());
 
-                g.DrawRectangle(myPen, new Rectangle(x, y, width, height));
-
-                 width = Convert.ToUInt16(buyone["location"]["width"].ToString());
-                 height = Convert.ToUInt16(buyone["location"]["height"].ToString());
-                 x = Convert.ToUInt16(buyone["location"]["left"].ToString());
-                 y = Convert.ToUInt16(buyone["location"]["top"].ToString());
                 g.DrawRectangle(myPen, new Rectangle(x, y, width, height));
 
                 g.DrawRectangle(myPen, new Rectangle(x - 68, y + height, 55, height));
@@ -129,6 +122,56 @@ namespace UnitTestProject
             var page = OcrEngine.Process(img);
             var result = page.GetText();
            
+        }
+
+        [TestMethod]
+        public void TestMethod3()
+        {
+            Bitmap bmp = new Bitmap(@"f:\byj\pic\test.png");
+
+            // Lock the bitmap's bits.  锁定位图  
+            Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
+            System.Drawing.Imaging.BitmapData bmpData =
+                bmp.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadWrite,
+                System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+
+            // Get the address of the first line.获取首行地址  
+            IntPtr ptr = bmpData.Scan0;
+
+            // Declare an array to hold the bytes of the bitmap.定义数组保存位图  
+            int bytes = Math.Abs(bmpData.Stride) * bmp.Height;
+            byte[] rgbValues = new byte[bytes];
+
+            // Copy the RGB values into the array.复制RGB值到数组  
+            System.Runtime.InteropServices.Marshal.Copy(ptr, rgbValues, 0, bytes);
+
+            // Set every third value to 255. A 24bpp bitmap will look red.  把每像素第3个值设为255.24bpp的位图将变红  
+            //for (int counter = 2; counter < rgbValues.Length; counter += 3)
+            //    rgbValues[counter] = 255;
+            int k = 0;
+            byte gray;
+            for (int i = 0; i < rect.Height; i++)
+            {
+                for (int j = 0; j < rect.Width; j++)
+                {
+                    //注意位图结构中RGB按BGR的顺序存储
+                    //k = 3 * j;
+                    //gray = (byte)(srcValues[i * scanWidth + k + 2] * 0.299
+                    //     + srcValues[i * scanWidth + k + 1] * 0.587
+                    //     + srcValues[i * scanWidth + k + 0] * 0.114);
+                    //rgbValues[m] = gray;  //将灰度值存到double的数组中
+                    //m++;
+                }
+            }
+
+            // Copy the RGB values back to the bitmap 把RGB值拷回位图  
+            System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, ptr, bytes);
+
+            // Unlock the bits.解锁  
+            bmp.UnlockBits(bmpData);
+
+            // Draw the modified image.绘制更新了的位图  
+            bmp.Save(@"f:\byj\pic\md2.png");
         }
     }
 }

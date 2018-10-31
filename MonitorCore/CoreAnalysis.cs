@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MonitorCore.Entity;
 using Tesseract;
 
 namespace MonitorCore
@@ -15,32 +16,56 @@ namespace MonitorCore
     public class CoreAnalysis
     {
 
-
+        public Market MarketList { get; set; }
         private List<Entity.MonitorLocation> _monitorList;
         public static List<TesseractEngine> OcrEngine { get; set; }
         
         private IntPtr AppMainHandler = IntPtr.Zero;
         
-
+        public List<Entity.MonitorLocation> MonitorList
+        {
+            get { return _monitorList; }
+            set { _monitorList = value; }
+        }
         /// <summary>
         /// 初始化函数
         /// </summary>
         public CoreAnalysis()
         {
             OcrEngine = new List<TesseractEngine>(3);
+            _monitorList = new List<MonitorLocation>();
             for (int i = 0; i < 3; i++)
             {
                 OcrEngine.Add(new TesseractEngine("./tessdata", "eng", EngineMode.CubeOnly));
                 OcrEngine[i].SetVariable("tessedit_char_whitelist", "0123456789");
+                var one = new MonitorLocation();
+                one.Width = 40;
+                one.Height = 20;
+                one.Name = "买一价";
+                _monitorList.Add(one);
+                var two = new MonitorLocation();
+                two.Width = 40;
+                two.Height = 20;
+                two.Name = "买一量";
+                _monitorList.Add(two);
+                var three = new MonitorLocation();
+                three.Width = 30;
+                three.Height = 20;
+                three.Name = "买一笔";
+                _monitorList.Add(three);
             }
-            LayoutAnalysis();
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            sb.Append(System.IO.File.ReadAllText(Application.StartupPath + @"\stocklist.json", System.Text.Encoding.Default));
+            MarketList = Newtonsoft.Json.JsonConvert.DeserializeObject<Market>(sb.ToString());
         }
+
+        
 
         public void SetAppHandler(string progrmaName)
         {
             #region 定位进程
             var ProcessList = Process.GetProcesses();
-            var appProcessId = 0;
+           
             foreach (var item in ProcessList)
             {
                 if (item.ProcessName == progrmaName)
@@ -59,17 +84,28 @@ namespace MonitorCore
             hScrDc = Win32API.GetWindowDC(AppMainHandler);
             Win32API.RECT windowRect = new Win32API.RECT();
             Win32API.GetWindowRect(AppMainHandler, ref windowRect);
-            int width = Convert.ToInt16(Math.Abs(windowRect.Right - windowRect.Left) * 1.25);
-            int height = Convert.ToInt32(Math.Abs(windowRect.Bottom - windowRect.Top) * 1.25); ;
+            int width = Convert.ToInt16(Math.Abs(windowRect.Right - windowRect.Left) );
+            int height = Convert.ToInt32(Math.Abs(windowRect.Bottom - windowRect.Top) ); ;
             hBitmap = Win32API.CreateCompatibleBitmap(hScrDc, width, height);
             hMemDc = Win32API.CreateCompatibleDC(hScrDc);
+            if (width < 300)
+            {
+                throw new Exception("未显示窗口，请在屏幕最大化监控程序窗口");
+            }
            
         }
         private IntPtr hBitmap, hMemDc, hScrDc;
+        private int appProcessId = 0;
+
+        public void SetMonitorLocation(List<MonitorLocation> monitorList)
+        {
+            _monitorList = monitorList;
+        }
+
         /// <summary>
         /// 图
         /// </summary>
-        public Bitmap Screenshot()
+        public Bitmap Screenshot(out string stockName)
         {
 
             hMemDc = Win32API.CreateCompatibleDC(hScrDc);
@@ -79,18 +115,19 @@ namespace MonitorCore
             Bitmap bmp = Image.FromHbitmap(hBitmap);
             Win32API.DeleteDC(hMemDc);
             //bmp.Save(@"d:\a_" + DateTime.Now.ToString("yyyyMMddhhmmssffff") + ".png");
+            stockName = Process.GetProcessById(appProcessId).MainWindowTitle.Replace("大智慧","").Replace("[","").Replace("]","").Replace(" ","").Replace("-","");
             return bmp;
         }
 
         /// <summary>
         /// 版面分析
         /// </summary>
-        public void LayoutAnalysis()
+        private void LayoutAnalysis(string pathName)
         {
             var client = new Baidu.Aip.Ocr.Ocr(BaiduHelper.API_KEY, BaiduHelper.SECRET_KEY);
 
             //导入定位图片
-            var image = File.ReadAllBytes("");
+            var image = File.ReadAllBytes(pathName);
 
             //定位“委买队列”
             // 调用通用文字识别, 图片参数为本地图片，可能会抛出网络等异常，请使用try/catch捕获
@@ -109,40 +146,29 @@ namespace MonitorCore
             // 带参数调用通用文字识别（含位置信息版）, 图片参数为本地图片
                 var result = client.General(image, options);
                 var show = result["words_result"].ToList();
-                var basic = show.Where(a => a["words"].ToString().StartsWith("委买队列"));
-                if (basic.Count() == 0)
+                var basic = show.Where(a => a["words"].ToString().StartsWith("委买队列")).FirstOrDefault();
+                if (basic == null)
                 {
-                    throw new Exception("未定位到标识位置,请切换！");
+                    //二次高精度
+                    var AccurateOptions = new Dictionary<string, object>{
+                        {"recognize_granularity", "big"},
+                        {"detect_direction", "true"},
+                        {"vertexes_location", "true"},
+                        {"probability", "true"}
+                    };
+                    result = client.Accurate(image, AccurateOptions);
+                    show = result["words_result"].ToList();
+                    basic = show.Where(a => a["words"].ToString().StartsWith("委买队列")).FirstOrDefault();
                 }
+                if (basic == null)
+                {
+                    throw new Exception("分析失败");
+                }
+                int width = Convert.ToUInt16(basic["location"]["width"].ToString());
+                int height = Convert.ToUInt16(basic["location"]["height"].ToString());
+                int x = Convert.ToUInt16(basic["location"]["left"].ToString());
+                int y = Convert.ToUInt16(basic["location"]["top"].ToString());
 
-                //System.Reflection.Assembly Asmb = System.Reflection.Assembly.GetExecutingAssembly();
-                //string strName = Asmb.GetName().Name + ".cfg.json";
-                //System.IO.Stream ManifestStream = Asmb.GetManifestResourceStream(strName);
-
-                //byte[] StreamData = new byte[ManifestStream.Length];
-                //ManifestStream.Read(StreamData, 0, (int)ManifestStream.Length);
-                //System.IO.Stream stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream(strName);
-                //System.IO.StreamReader sr = new System.IO.StreamReader(stream, Encoding.Default);
-                //var conString = sr.ReadToEnd();
-                //var configList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Entity.CfgLocation>>(conString);
-
-                //int iActulaWidth = Screen.PrimaryScreen.Bounds.Width;
-
-                //int iActulaHeight = Screen.PrimaryScreen.Bounds.Height;
-                //foreach (var item in configList)
-                //{
-                    //if (item.Resolution == iActulaWidth.ToString() + iActulaHeight.ToString())
-                    //{
-                    //    if (!_monitorList.ContainsKey(item.Name))
-                    //    {
-                    //        Entity.MonitorLocation one = new Entity.MonitorLocation();
-                    //        one.Name = item.Name;
-                    //        one.X = item.
-                    //        _monitorList.Add(item.Resolution, one);
-                    //    }
-                    //}
-
-               // }
             }
             catch(Exception e)
             {
@@ -154,21 +180,22 @@ namespace MonitorCore
         public string CatImageAnalysis(Bitmap bmp, int i)
         {
             System.Drawing.Rectangle rectangle = new Rectangle();
-            rectangle.X = Convert.ToInt16(_monitorList[i].X * 1.25);
-            rectangle.Y = Convert.ToInt16(_monitorList[i].Y * 1.25);
+            rectangle.X = Convert.ToInt16(_monitorList[i].X );
+            rectangle.Y = Convert.ToInt16(_monitorList[i].Y );
             rectangle.Width = _monitorList[i].Width;
             rectangle.Height = _monitorList[i].Height;
             Bitmap catedImage = bmp.Clone(rectangle, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-           
-            return Ocr(catedImage, i);
+            catedImage.Save(Application.StartupPath +"\\"+i.ToString() +"_" + DateTime.Now.ToString("yyyyMMddhhmmssffff") + ".png");
+            var page = OcrEngine[i].Process(catedImage);
+            
+            var text = page.GetText().Replace("\n","").Replace("T","7").Replace("S","9").Replace("I","1");
+            page.Dispose();
+            catedImage.Dispose();
+            return text;
         }
 
-        public string Ocr(Bitmap img, int i)
-        {
+        
 
-            var page = OcrEngine[i].Process(img);
-            var result = page.GetText();
-            return  result;
-        }
+        
     }
 }

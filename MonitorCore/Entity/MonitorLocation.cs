@@ -17,5 +17,7 @@ namespace MonitorCore.Entity
         public int Width { get; set; }
 
         public string Name { get; set; }
+
+        public string Market { get; set; }
     }
 }
