@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using MonitorCore.Entity;
 using Tesseract;
+using static MonitorCore.Win32API;
 
 namespace MonitorCore
 {
@@ -34,11 +35,20 @@ namespace MonitorCore
         {
             OcrEngine = new List<TesseractEngine>(3);
             _monitorList = new List<MonitorLocation>();
-            for (int i = 0; i < 3; i++)
-            {
-                OcrEngine.Add(new TesseractEngine("./tessdata", "eng", EngineMode.CubeOnly));
-                OcrEngine[i].SetVariable("tessedit_char_whitelist", "0123456789");
-                var one = new MonitorLocation();
+
+            var te0 = new TesseractEngine("./tessdata", "eng", EngineMode.CubeOnly);
+            te0.SetVariable("tessedit_char_whitelist", "0123456789");
+            OcrEngine.Add(te0);
+
+            var te1 = new TesseractEngine("./tessdata", "eng", EngineMode.TesseractOnly);
+            te1.SetVariable("tessedit_char_whitelist", "0123456789");
+            OcrEngine.Add(te1);
+
+            var te2 = new TesseractEngine("./tessdata", "chi_sim", EngineMode.CubeOnly);
+            te2.SetVariable("tessedit_char_whitelist", "0123456789笔");
+            OcrEngine.Add(te2);
+
+            var one = new MonitorLocation();
                 one.Width = 40;
                 one.Height = 20;
                 one.Name = "买一价";
@@ -53,28 +63,64 @@ namespace MonitorCore
                 three.Height = 20;
                 three.Name = "买一笔";
                 _monitorList.Add(three);
-            }
+            
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
             sb.Append(System.IO.File.ReadAllText(Application.StartupPath + @"\stocklist.json", System.Text.Encoding.Default));
             MarketList = Newtonsoft.Json.JsonConvert.DeserializeObject<Market>(sb.ToString());
         }
 
-        
 
+        //寻找系统的全部窗口
+        private WindowInfo[] GetAllDesktopWindows()
+        {
+            List<WindowInfo> wndList = new List<WindowInfo>();
+            Win32API.EnumWindows(delegate (IntPtr hWnd, int lParam)
+            {
+                WindowInfo wnd = new WindowInfo();
+                StringBuilder sb = new StringBuilder(256);
+                //get hwnd
+                wnd.hWnd = hWnd;
+                //get window name
+                Win32API.GetWindowTextW(hWnd, sb, sb.Capacity);
+                wnd.szWindowName = sb.ToString();
+                //get window class
+                Win32API.GetClassNameW(hWnd, sb, sb.Capacity);
+                wnd.szClassName = sb.ToString();
+                Console.WriteLine("Window handle=" + wnd.hWnd.ToString().PadRight(20) + " szClassName=" + wnd.szClassName.PadRight(20) + " szWindowName=" + wnd.szWindowName);
+                //add it into list
+                wndList.Add(wnd);
+                return true;
+            }, 0);
+            return wndList.ToArray();
+        }
         public void SetAppHandler(string progrmaName)
         {
-            #region 定位进程
             var ProcessList = Process.GetProcesses();
-           
+
             foreach (var item in ProcessList)
             {
                 if (item.ProcessName == progrmaName)
                 {
                     appProcessId = item.Id;
-                    AppMainHandler = item.MainWindowHandle;
+                    
                     break;
                 }
             }
+            #region 定位进程
+            Win32API.WindowInfo[] a = GetAllDesktopWindows();
+            int i = 0;
+            int index = 0;
+            for (i = 0; i < a.Length; i++)
+            {
+                
+                // MessageBox.Show(a[i].szWindowName.ToString());
+                if (a[i].szWindowName.ToString().Contains("大智慧") && a[i].szClassName.Contains("Afx"))
+                {
+                    Debug.WriteLine(a[i].szWindowName.ToString());
+                    index = i;
+                }
+            }
+            AppMainHandler = a[index].hWnd;
             if (AppMainHandler == IntPtr.Zero)
             {
                 throw new Exception("未找到监控程序");
@@ -84,8 +130,8 @@ namespace MonitorCore
             hScrDc = Win32API.GetWindowDC(AppMainHandler);
             Win32API.RECT windowRect = new Win32API.RECT();
             Win32API.GetWindowRect(AppMainHandler, ref windowRect);
-            int width = Convert.ToInt16(Math.Abs(windowRect.Right - windowRect.Left) );
-            int height = Convert.ToInt32(Math.Abs(windowRect.Bottom - windowRect.Top) ); ;
+            int width = Convert.ToInt16(Math.Abs(windowRect.Right - windowRect.Left) * 1.25);
+            int height = Convert.ToInt16(Math.Abs(windowRect.Bottom - windowRect.Top) *1.25 ); 
             hBitmap = Win32API.CreateCompatibleBitmap(hScrDc, width, height);
             hMemDc = Win32API.CreateCompatibleDC(hScrDc);
             if (width < 300)
@@ -115,7 +161,10 @@ namespace MonitorCore
             Bitmap bmp = Image.FromHbitmap(hBitmap);
             Win32API.DeleteDC(hMemDc);
             //bmp.Save(@"d:\a_" + DateTime.Now.ToString("yyyyMMddhhmmssffff") + ".png");
-            stockName = Process.GetProcessById(appProcessId).MainWindowTitle.Replace("大智慧","").Replace("[","").Replace("]","").Replace(" ","").Replace("-","");
+            StringBuilder title = new StringBuilder(256);
+            GetWindowText(AppMainHandler, title, title.Capacity);//得到窗口的标题 
+            Win32API.GetWindowTextW(AppMainHandler, title, title.Capacity);
+            stockName =  title.ToString().Replace("大智慧","").Replace("[","").Replace("]","").Replace(" ","").Replace("-","");
             return bmp;
         }
 
@@ -182,10 +231,10 @@ namespace MonitorCore
             System.Drawing.Rectangle rectangle = new Rectangle();
             rectangle.X = Convert.ToInt16(_monitorList[i].X );
             rectangle.Y = Convert.ToInt16(_monitorList[i].Y );
-            rectangle.Width = _monitorList[i].Width;
-            rectangle.Height = _monitorList[i].Height;
+            rectangle.Width = Convert.ToInt16(  _monitorList[i].Width);
+            rectangle.Height = Convert.ToInt16( _monitorList[i].Height);
             Bitmap catedImage = bmp.Clone(rectangle, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            catedImage.Save(Application.StartupPath +"\\"+i.ToString() +"_" + DateTime.Now.ToString("yyyyMMddhhmmssffff") + ".png");
+            catedImage.Save(Application.StartupPath +"\\save\\"+i.ToString() +"_" + DateTime.Now.ToString("yyyyMMddhhmmssffff") + ".png");
             var page = OcrEngine[i].Process(catedImage);
             
             var text = page.GetText().Replace("\n","").Replace("T","7").Replace("S","9").Replace("I","1");

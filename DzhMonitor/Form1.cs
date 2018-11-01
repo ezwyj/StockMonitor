@@ -28,33 +28,50 @@ namespace DzhMonitor
             Application.ExitThread();
             Application.Exit();
         }
-        
+        private System.Threading.SynchronizationContext synchronizationContext;
         private void buttonStart_Click(object sender, EventArgs e)
         {
+            Program.Run = true;
+            this.buttonStop.Enabled = true;
+            this.buttonStart.Enabled = false;
             string stockName = "";
             Stopwatch sw = new Stopwatch();
-
-            //while (true)
-            //{
+            synchronizationContext = SynchronizationContext.Current;
+            Task.Run(() =>
+            {
+            while (Program.Run)
+            {
                 sw.Start();
-                string v0="", v1="", v2="";
+                string v0 = "", v1 = "", v2 = "";
                 var bmp = Program.CoreAnalysis.Screenshot(out stockName);
-            //Parallel.Invoke(() => v0= Program.CoreAnalysis.CatImageAnalysis(bmp, 0), () => v1 = Program.CoreAnalysis.CatImageAnalysis(bmp, 1), () => v2 = Program.CoreAnalysis.CatImageAnalysis(bmp, 2));
+                //Parallel.Invoke(() => v0= Program.CoreAnalysis.CatImageAnalysis(bmp, 0), () => v1 = Program.CoreAnalysis.CatImageAnalysis(bmp, 1), () => v2 = Program.CoreAnalysis.CatImageAnalysis(bmp, 2));
                 v0 = Program.CoreAnalysis.CatImageAnalysis(bmp, 0);
                 v1 = Program.CoreAnalysis.CatImageAnalysis(bmp, 1);
                 v2 = Program.CoreAnalysis.CatImageAnalysis(bmp, 2);
-                this.Text = stockName;
-                label0.Text = v0;
-                label1.Text = v1;
-                label2.Text = v2;
+
+
+                synchronizationContext.Send(a =>
+                {
+                    this.label0.Text = v0;
+                    this.label1.Text = v1;
+                    this.label2.Text = v2;
+                }, null);
+
+
                 sw.Stop();
                 TimeSpan ts = sw.Elapsed;
+
+            
+            synchronizationContext.Send(a =>
+            {
                 label7.Text = "花费时间：" + ts.TotalMilliseconds;
-                Thread.Sleep(int.Parse(comboBoxInvalidate.SelectedItem.ToString()));
-            //}
-
-
+                this.Text = stockName;
+            }, null);
+            Thread.Sleep(1000);
+            sw.Restart();
         }
+            });
+     }
 
         private void button2_Click(object sender, EventArgs e)
         {
@@ -63,6 +80,7 @@ namespace DzhMonitor
 
         private void buttonSZ_Click(object sender, EventArgs e)
         {
+            buttonStop_Click(sender, e);
             string stockName = "";
             Program.CoreAnalysis.Screenshot(out stockName);
             this.Text = stockName;
@@ -81,6 +99,7 @@ namespace DzhMonitor
 
         private void buttonSH_Click(object sender, EventArgs e)
         {
+            buttonStop_Click(sender, e);
             string stockName = "";
             Program.CoreAnalysis.Screenshot(out stockName);
             this.Text = stockName;
@@ -95,6 +114,13 @@ namespace DzhMonitor
             {
                 MessageBox.Show("当前监视股票未包含在上海市场中");
             }
+        }
+
+        private void buttonStop_Click(object sender, EventArgs e)
+        {
+            Program.Run = false;
+            this.buttonStart.Enabled = true;
+            this.buttonStop.Enabled = false;
         }
     }
 }

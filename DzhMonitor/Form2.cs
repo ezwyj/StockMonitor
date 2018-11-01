@@ -17,9 +17,7 @@ namespace DzhMonitor
         public Form2()
         {
             InitializeComponent();
-            radioButton1.Checked = true;
-            radioButton2.Checked = false;
-            radioButton3.Checked = false;
+            
 
         }
 
@@ -28,7 +26,9 @@ namespace DzhMonitor
             string stockTitle = "";
             currentControl = 0;
             screen = Program.CoreAnalysis.Screenshot(out stockTitle);
-           
+            radioButton1.Checked = true;
+            radioButton2.Checked = false;
+            radioButton3.Checked = false;
             pictureBoxScreen.Image = screen;
             screen.Save(Application.StartupPath + "\\main.png");
             int iActulaWidth = Screen.PrimaryScreen.Bounds.Width;
@@ -76,8 +76,8 @@ namespace DzhMonitor
             currentControl = 1;
             radioButton1.Checked = false;
             radioButton3.Checked = false;
-            domainUpDownWidth.Text = Program.CoreAnalysis.MonitorList[currentControl].Width.ToString();
-            domainUpDownHeight.Text = Program.CoreAnalysis.MonitorList[currentControl].Height.ToString();
+            numericUpDownWidth.Text = Program.CoreAnalysis.MonitorList[currentControl].Width.ToString();
+            numericUpDownHeight.Text = Program.CoreAnalysis.MonitorList[currentControl].Height.ToString();
         }
 
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
@@ -85,8 +85,8 @@ namespace DzhMonitor
             currentControl = 0;
             radioButton2.Checked = false;
             radioButton3.Checked = false;
-            domainUpDownWidth.Text = Program.CoreAnalysis.MonitorList[currentControl].Width.ToString();
-            domainUpDownHeight.Text = Program.CoreAnalysis.MonitorList[currentControl].Height.ToString();
+            numericUpDownWidth.Text = Program.CoreAnalysis.MonitorList[currentControl].Width.ToString();
+            numericUpDownHeight.Text = Program.CoreAnalysis.MonitorList[currentControl].Height.ToString();
         }
 
         private void radioButton3_CheckedChanged(object sender, EventArgs e)
@@ -94,8 +94,8 @@ namespace DzhMonitor
             currentControl = 2;
             radioButton1.Checked = false;
             radioButton2.Checked = false;
-            domainUpDownWidth.Text = Program.CoreAnalysis.MonitorList[currentControl].Width.ToString();
-            domainUpDownHeight.Text = Program.CoreAnalysis.MonitorList[currentControl].Height.ToString();
+            numericUpDownWidth.Text = Program.CoreAnalysis.MonitorList[currentControl].Width.ToString();
+            numericUpDownHeight.Text = Program.CoreAnalysis.MonitorList[currentControl].Height.ToString();
         }
 
         private void buttonSave_Click(object sender, EventArgs e)
@@ -162,6 +162,10 @@ namespace DzhMonitor
             {
                 Program.CoreAnalysis.MonitorList[currentControl].X = 0;
             }
+            draw();
+        }
+        private void draw()
+        {
             var tempBitmap = CatImage(currentControl);
             switch (currentControl)
             {
@@ -176,43 +180,76 @@ namespace DzhMonitor
                     break;
             }
         }
-
         private void buttonRight_Click(object sender, EventArgs e)
         {
             Program.CoreAnalysis.MonitorList[currentControl].X = Program.CoreAnalysis.MonitorList[currentControl].X + 1;
-            var tempBitmap = CatImage(currentControl);
-            switch (currentControl)
+            draw();
+        }
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == (Keys.Control | Keys.Left ))
             {
-                case 0:
-                    pictureBox0.Image = tempBitmap;
-                    break;
-                case 1:
-                    pictureBox1.Image = tempBitmap;
-                    break;
-                case 2:
-                    pictureBox2.Image = tempBitmap;
-                    break;
+                buttonLeft_Click(null, null);
+                return true;
             }
+            if (keyData == (Keys.Control | Keys.Right))
+            {
+                buttonRight_Click(null, null);
+                return true;
+            }
+
+            if (keyData == (Keys.Control | Keys.Down))
+            {
+                buttonDown_Click(null, null);
+                return true;
+            }
+
+            if (keyData == (Keys.Control | Keys.Up))
+            {
+                buttonUp_Click(null, null);
+                return true;
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
         }
 
         private void Form2_KeyDown(object sender, KeyEventArgs e)
         {
-            switch(e.KeyCode )
-            {
-                case Keys.Left:
-                    buttonLeft_Click(sender, e);
-                    break;
-                case Keys.Right:
-                    buttonRight_Click(sender, e);
-                    break;
-                case Keys.Up:
-                    buttonUp_Click(sender, e);
-                    break;
-                case Keys.Down:
-                    buttonDown_Click(sender, e);
-                    break;
+          
+        //    switch(e.KeyCode )
+        //    {
+        //        case Keys.Left:
+                    
+        //            break;
+        //        case Keys.Right:
+        //            buttonRight_Click(sender, e);
+        //            break;
+        //        case Keys.Up:
+        //            buttonUp_Click(sender, e);
+        //            break;
+        //        case Keys.Down:
+        //            buttonDown_Click(sender, e);
+        //            break;
 
-            }
+        //    }
+        }
+
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+            Program.CoreAnalysis.MonitorList[currentControl].Width += 1;
+            draw();
+        }
+
+        private void numericUpDownHeight_ValueChanged(object sender, EventArgs e)
+        {
+            
+            Program.CoreAnalysis.MonitorList[currentControl].Height= int.Parse(numericUpDownHeight.Value.ToString());
+            draw();
+        }
+
+        private void numericUpDownWidth_ValueChanged(object sender, EventArgs e)
+        {
+            Program.CoreAnalysis.MonitorList[currentControl].Width = int.Parse(numericUpDownWidth.Value.ToString());
+            draw();
         }
     }
 }

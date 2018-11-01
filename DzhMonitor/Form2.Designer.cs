@@ -41,55 +41,62 @@
             this.buttonRight = new System.Windows.Forms.Button();
             this.buttonDown = new System.Windows.Forms.Button();
             this.buttonSave = new System.Windows.Forms.Button();
-            this.domainUpDownHeight = new System.Windows.Forms.DomainUpDown();
-            this.domainUpDownWidth = new System.Windows.Forms.DomainUpDown();
+            this.numericUpDownHeight = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownWidth = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxScreen)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox0)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownHeight)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWidth)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBoxScreen
             // 
             this.pictureBoxScreen.Location = new System.Drawing.Point(1, 1);
+            this.pictureBoxScreen.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxScreen.Name = "pictureBoxScreen";
-            this.pictureBoxScreen.Size = new System.Drawing.Size(796, 244);
+            this.pictureBoxScreen.Size = new System.Drawing.Size(1061, 305);
             this.pictureBoxScreen.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBoxScreen.TabIndex = 0;
             this.pictureBoxScreen.TabStop = false;
             // 
             // pictureBox0
             // 
-            this.pictureBox0.Location = new System.Drawing.Point(32, 251);
+            this.pictureBox0.Location = new System.Drawing.Point(43, 314);
+            this.pictureBox0.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox0.Name = "pictureBox0";
-            this.pictureBox0.Size = new System.Drawing.Size(100, 27);
+            this.pictureBox0.Size = new System.Drawing.Size(133, 34);
             this.pictureBox0.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pictureBox0.TabIndex = 1;
             this.pictureBox0.TabStop = false;
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(267, 251);
+            this.pictureBox1.Location = new System.Drawing.Point(356, 314);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(100, 27);
+            this.pictureBox1.Size = new System.Drawing.Size(133, 34);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pictureBox1.TabIndex = 2;
             this.pictureBox1.TabStop = false;
             // 
             // pictureBox2
             // 
-            this.pictureBox2.Location = new System.Drawing.Point(533, 251);
+            this.pictureBox2.Location = new System.Drawing.Point(711, 314);
+            this.pictureBox2.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(100, 27);
+            this.pictureBox2.Size = new System.Drawing.Size(133, 34);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pictureBox2.TabIndex = 3;
             this.pictureBox2.TabStop = false;
             // 
             // buttonExit
             // 
-            this.buttonExit.Location = new System.Drawing.Point(713, 415);
+            this.buttonExit.Location = new System.Drawing.Point(951, 519);
+            this.buttonExit.Margin = new System.Windows.Forms.Padding(4);
             this.buttonExit.Name = "buttonExit";
-            this.buttonExit.Size = new System.Drawing.Size(75, 23);
+            this.buttonExit.Size = new System.Drawing.Size(100, 29);
             this.buttonExit.TabIndex = 4;
             this.buttonExit.Text = "退出";
             this.buttonExit.UseVisualStyleBackColor = true;
@@ -98,9 +105,10 @@
             // radioButton1
             // 
             this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(12, 265);
+            this.radioButton1.Location = new System.Drawing.Point(16, 331);
+            this.radioButton1.Margin = new System.Windows.Forms.Padding(4);
             this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(14, 13);
+            this.radioButton1.Size = new System.Drawing.Size(17, 16);
             this.radioButton1.TabIndex = 5;
             this.radioButton1.TabStop = true;
             this.radioButton1.UseVisualStyleBackColor = true;
@@ -109,9 +117,10 @@
             // radioButton2
             // 
             this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(247, 265);
+            this.radioButton2.Location = new System.Drawing.Point(329, 331);
+            this.radioButton2.Margin = new System.Windows.Forms.Padding(4);
             this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(14, 13);
+            this.radioButton2.Size = new System.Drawing.Size(17, 16);
             this.radioButton2.TabIndex = 5;
             this.radioButton2.TabStop = true;
             this.radioButton2.UseVisualStyleBackColor = true;
@@ -120,9 +129,10 @@
             // radioButton3
             // 
             this.radioButton3.AutoSize = true;
-            this.radioButton3.Location = new System.Drawing.Point(513, 265);
+            this.radioButton3.Location = new System.Drawing.Point(684, 331);
+            this.radioButton3.Margin = new System.Windows.Forms.Padding(4);
             this.radioButton3.Name = "radioButton3";
-            this.radioButton3.Size = new System.Drawing.Size(14, 13);
+            this.radioButton3.Size = new System.Drawing.Size(17, 16);
             this.radioButton3.TabIndex = 5;
             this.radioButton3.TabStop = true;
             this.radioButton3.UseVisualStyleBackColor = true;
@@ -130,9 +140,10 @@
             // 
             // buttonUp
             // 
-            this.buttonUp.Location = new System.Drawing.Point(131, 347);
+            this.buttonUp.Location = new System.Drawing.Point(175, 434);
+            this.buttonUp.Margin = new System.Windows.Forms.Padding(4);
             this.buttonUp.Name = "buttonUp";
-            this.buttonUp.Size = new System.Drawing.Size(75, 23);
+            this.buttonUp.Size = new System.Drawing.Size(100, 29);
             this.buttonUp.TabIndex = 6;
             this.buttonUp.Text = "上";
             this.buttonUp.UseVisualStyleBackColor = true;
@@ -140,9 +151,10 @@
             // 
             // buttonLeft
             // 
-            this.buttonLeft.Location = new System.Drawing.Point(50, 379);
+            this.buttonLeft.Location = new System.Drawing.Point(67, 474);
+            this.buttonLeft.Margin = new System.Windows.Forms.Padding(4);
             this.buttonLeft.Name = "buttonLeft";
-            this.buttonLeft.Size = new System.Drawing.Size(75, 23);
+            this.buttonLeft.Size = new System.Drawing.Size(100, 29);
             this.buttonLeft.TabIndex = 7;
             this.buttonLeft.Text = "左";
             this.buttonLeft.UseVisualStyleBackColor = true;
@@ -150,9 +162,10 @@
             // 
             // buttonRight
             // 
-            this.buttonRight.Location = new System.Drawing.Point(222, 379);
+            this.buttonRight.Location = new System.Drawing.Point(296, 474);
+            this.buttonRight.Margin = new System.Windows.Forms.Padding(4);
             this.buttonRight.Name = "buttonRight";
-            this.buttonRight.Size = new System.Drawing.Size(75, 23);
+            this.buttonRight.Size = new System.Drawing.Size(100, 29);
             this.buttonRight.TabIndex = 8;
             this.buttonRight.Text = "右";
             this.buttonRight.UseVisualStyleBackColor = true;
@@ -160,9 +173,10 @@
             // 
             // buttonDown
             // 
-            this.buttonDown.Location = new System.Drawing.Point(131, 398);
+            this.buttonDown.Location = new System.Drawing.Point(175, 498);
+            this.buttonDown.Margin = new System.Windows.Forms.Padding(4);
             this.buttonDown.Name = "buttonDown";
-            this.buttonDown.Size = new System.Drawing.Size(75, 23);
+            this.buttonDown.Size = new System.Drawing.Size(100, 29);
             this.buttonDown.TabIndex = 9;
             this.buttonDown.Text = "下";
             this.buttonDown.UseVisualStyleBackColor = true;
@@ -170,37 +184,38 @@
             // 
             // buttonSave
             // 
-            this.buttonSave.Location = new System.Drawing.Point(632, 415);
+            this.buttonSave.Location = new System.Drawing.Point(843, 519);
+            this.buttonSave.Margin = new System.Windows.Forms.Padding(4);
             this.buttonSave.Name = "buttonSave";
-            this.buttonSave.Size = new System.Drawing.Size(75, 23);
+            this.buttonSave.Size = new System.Drawing.Size(100, 29);
             this.buttonSave.TabIndex = 10;
             this.buttonSave.Text = "保存";
             this.buttonSave.UseVisualStyleBackColor = true;
             this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
             // 
-            // domainUpDownHeight
+            // numericUpDownHeight
             // 
-            this.domainUpDownHeight.Location = new System.Drawing.Point(369, 352);
-            this.domainUpDownHeight.Name = "domainUpDownHeight";
-            this.domainUpDownHeight.Size = new System.Drawing.Size(120, 21);
-            this.domainUpDownHeight.TabIndex = 12;
-            this.domainUpDownHeight.Text = "0";
+            this.numericUpDownHeight.Location = new System.Drawing.Point(459, 462);
+            this.numericUpDownHeight.Name = "numericUpDownHeight";
+            this.numericUpDownHeight.Size = new System.Drawing.Size(120, 25);
+            this.numericUpDownHeight.TabIndex = 11;
+            this.numericUpDownHeight.ValueChanged += new System.EventHandler(this.numericUpDownHeight_ValueChanged);
             // 
-            // domainUpDownWidth
+            // numericUpDownWidth
             // 
-            this.domainUpDownWidth.Location = new System.Drawing.Point(522, 351);
-            this.domainUpDownWidth.Name = "domainUpDownWidth";
-            this.domainUpDownWidth.Size = new System.Drawing.Size(120, 21);
-            this.domainUpDownWidth.TabIndex = 13;
-            this.domainUpDownWidth.Text = "0";
+            this.numericUpDownWidth.Location = new System.Drawing.Point(640, 462);
+            this.numericUpDownWidth.Name = "numericUpDownWidth";
+            this.numericUpDownWidth.Size = new System.Drawing.Size(120, 25);
+            this.numericUpDownWidth.TabIndex = 12;
+            this.numericUpDownWidth.ValueChanged += new System.EventHandler(this.numericUpDownWidth_ValueChanged);
             // 
             // Form2
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.domainUpDownWidth);
-            this.Controls.Add(this.domainUpDownHeight);
+            this.ClientSize = new System.Drawing.Size(1067, 562);
+            this.Controls.Add(this.numericUpDownWidth);
+            this.Controls.Add(this.numericUpDownHeight);
             this.Controls.Add(this.buttonSave);
             this.Controls.Add(this.buttonDown);
             this.Controls.Add(this.buttonRight);
@@ -215,6 +230,7 @@
             this.Controls.Add(this.pictureBox0);
             this.Controls.Add(this.pictureBoxScreen);
             this.KeyPreview = true;
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form2";
             this.Text = "Form2";
             this.Load += new System.EventHandler(this.Form2_Load);
@@ -223,6 +239,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox0)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownHeight)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWidth)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -243,7 +261,7 @@
         private System.Windows.Forms.Button buttonRight;
         private System.Windows.Forms.Button buttonDown;
         private System.Windows.Forms.Button buttonSave;
-        private System.Windows.Forms.DomainUpDown domainUpDownHeight;
-        private System.Windows.Forms.DomainUpDown domainUpDownWidth;
+        private System.Windows.Forms.NumericUpDown numericUpDownHeight;
+        private System.Windows.Forms.NumericUpDown numericUpDownWidth;
     }
 }

@@ -9,7 +9,8 @@ namespace DzhMonitor
     static class Program
     {
         public static MonitorCore.CoreAnalysis CoreAnalysis { get; set; }
-      
+        public static bool Run { get; set; }
+
         /// <summary>
         /// 应用程序的主入口点。
         /// </summary>
@@ -18,10 +19,24 @@ namespace DzhMonitor
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            
-            CoreAnalysis = new MonitorCore.CoreAnalysis();
-           
-            Application.Run(new Form1());
+
+            try
+            {
+                Application.ThreadException += Application_ThreadException;
+                CoreAnalysis = new MonitorCore.CoreAnalysis();
+                Run = false;
+                Application.Run(new Form1());
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+
+        }
+
+        private static void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
+        {
+            MessageBox.Show(e.Exception.Message);
         }
     }
 }

@@ -7,10 +7,37 @@ using System.Threading.Tasks;
 
 namespace MonitorCore
 {
+
+
     [StructLayout(LayoutKind.Sequential)]
     
     public class Win32API
     {
+        public struct WindowInfo
+        {
+            public IntPtr hWnd;
+            public string szWindowName;
+            public string szClassName;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct ProcessEntry32
+        {
+            public uint dwSize;
+            public uint cntUsage;
+            public uint th32ProcessID;
+            public IntPtr th32DefaultHeapID;
+            public uint th32ModuleID;
+            public uint cntThreads;
+            public uint th32ParentProcessID;
+            public int pcPriClassBase;
+            public uint dwFlags;
+
+
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
+            public string szExeFile;
+        }
+
         public struct RECT
         {
             public int Left;                             //最左坐标
@@ -56,5 +83,27 @@ namespace MonitorCore
 
         [DllImport("user32.dll")]
         public static extern bool SetForegroundWindow(IntPtr hWnd);
+
+        [DllImport("KERNEL32.DLL ")]
+        public static extern IntPtr CreateToolhelp32Snapshot(uint flags, uint processid);
+        [DllImport("KERNEL32.DLL ")]
+        public static extern int CloseHandle(IntPtr handle);
+        [DllImport("KERNEL32.DLL ")]
+        public static extern int Process32First(IntPtr handle, ref ProcessEntry32 pe);
+        [DllImport("KERNEL32.DLL ")]
+        public static extern int Process32Next(IntPtr handle, ref ProcessEntry32 pe);
+
+        public delegate bool WNDENUMPROC(IntPtr hWnd, int lParam);
+        [DllImport("user32.dll")]
+        public static extern bool EnumWindows(WNDENUMPROC lpEnumFunc, int lParam);
+        [DllImport("user32.dll", EntryPoint = "FindWindow", SetLastError = true)]//查找窗口
+        public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+        [DllImport("user32.dll")]
+        public static extern int GetWindowText(IntPtr hWnd, StringBuilder lpString, int nMaxCount);
+        [DllImport("user32.dll")]
+        public static extern int GetWindowTextW(IntPtr hWnd, [MarshalAs(UnmanagedType.LPWStr)]StringBuilder lpString, int nMaxCount);
+        [DllImport("user32.dll")]
+        public static extern int GetClassNameW(IntPtr hWnd, [MarshalAs(UnmanagedType.LPWStr)]StringBuilder lpString, int nMaxCount);
     }
+
 }
