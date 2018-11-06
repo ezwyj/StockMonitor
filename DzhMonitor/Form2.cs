@@ -14,10 +14,18 @@ namespace DzhMonitor
     {
         private int currentControl = 0;
         private Bitmap screen = null;
-        public Form2()
+        private int _market;
+        public Form2(string v)
         {
             InitializeComponent();
-            
+            if(v=="SZ")
+            {
+                _market = 0;
+            }
+            else
+            {
+                _market = 3;
+            }
 
         }
 
@@ -56,10 +64,10 @@ namespace DzhMonitor
         public Bitmap CatImage(int i)
         {
             System.Drawing.Rectangle rectangle = new Rectangle();
-            rectangle.X = Convert.ToInt16(Program.CoreAnalysis.MonitorList[i].X );
-            rectangle.Y = Convert.ToInt16(Program.CoreAnalysis.MonitorList[i].Y );
-            rectangle.Width = Program.CoreAnalysis.MonitorList[i].Width;
-            rectangle.Height = Program.CoreAnalysis.MonitorList[i].Height;
+            rectangle.X = Convert.ToInt16(Program.CoreAnalysis.MonitorList[i + _market].X );
+            rectangle.Y = Convert.ToInt16(Program.CoreAnalysis.MonitorList[i + _market].Y );
+            rectangle.Width = Program.CoreAnalysis.MonitorList[i + _market].Width;
+            rectangle.Height = Program.CoreAnalysis.MonitorList[i + _market].Height;
             Bitmap catedImage = screen.Clone(rectangle, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             return catedImage;
         }
@@ -76,17 +84,17 @@ namespace DzhMonitor
             currentControl = 1;
             radioButton1.Checked = false;
             radioButton3.Checked = false;
-            numericUpDownWidth.Text = Program.CoreAnalysis.MonitorList[currentControl].Width.ToString();
-            numericUpDownHeight.Text = Program.CoreAnalysis.MonitorList[currentControl].Height.ToString();
+            numericUpDownWidth.Text = Program.CoreAnalysis.MonitorList[currentControl + _market].Width.ToString();
+            numericUpDownHeight.Text = Program.CoreAnalysis.MonitorList[currentControl + _market].Height.ToString();
         }
 
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
-            currentControl = 0;
+            currentControl = 0 ;
             radioButton2.Checked = false;
             radioButton3.Checked = false;
-            numericUpDownWidth.Text = Program.CoreAnalysis.MonitorList[currentControl].Width.ToString();
-            numericUpDownHeight.Text = Program.CoreAnalysis.MonitorList[currentControl].Height.ToString();
+            numericUpDownWidth.Text = Program.CoreAnalysis.MonitorList[currentControl + _market].Width.ToString();
+            numericUpDownHeight.Text = Program.CoreAnalysis.MonitorList[currentControl + _market].Height.ToString();
         }
 
         private void radioButton3_CheckedChanged(object sender, EventArgs e)
@@ -94,8 +102,8 @@ namespace DzhMonitor
             currentControl = 2;
             radioButton1.Checked = false;
             radioButton2.Checked = false;
-            numericUpDownWidth.Text = Program.CoreAnalysis.MonitorList[currentControl].Width.ToString();
-            numericUpDownHeight.Text = Program.CoreAnalysis.MonitorList[currentControl].Height.ToString();
+            numericUpDownWidth.Text = Program.CoreAnalysis.MonitorList[currentControl + _market].Width.ToString();
+            numericUpDownHeight.Text = Program.CoreAnalysis.MonitorList[currentControl + _market].Height.ToString();
         }
 
         private void buttonSave_Click(object sender, EventArgs e)
@@ -110,7 +118,7 @@ namespace DzhMonitor
 
         private void buttonUp_Click(object sender, EventArgs e)
         {
-            Program.CoreAnalysis.MonitorList[currentControl].Y = Program.CoreAnalysis.MonitorList[currentControl].Y - 1;
+            Program.CoreAnalysis.MonitorList[currentControl + _market].Y = Program.CoreAnalysis.MonitorList[currentControl + _market].Y - 1;
             var tempBitmap =  CatImage(currentControl);
             switch (currentControl)
             {
@@ -135,10 +143,10 @@ namespace DzhMonitor
 
         private void buttonDown_Click(object sender, EventArgs e)
         {
-            Program.CoreAnalysis.MonitorList[currentControl].Y = Program.CoreAnalysis.MonitorList[currentControl].Y + 1;
-            if (Program.CoreAnalysis.MonitorList[currentControl].Y < 0)
+            Program.CoreAnalysis.MonitorList[currentControl + _market].Y = Program.CoreAnalysis.MonitorList[currentControl + _market].Y + 1;
+            if (Program.CoreAnalysis.MonitorList[currentControl + _market].Y < 0)
             {
-                Program.CoreAnalysis.MonitorList[currentControl].Y = 0;
+                Program.CoreAnalysis.MonitorList[currentControl + _market].Y = 0;
             }
             var tempBitmap = CatImage(currentControl);
             switch (currentControl)
@@ -157,10 +165,10 @@ namespace DzhMonitor
 
         private void buttonLeft_Click(object sender, EventArgs e)
         {
-            Program.CoreAnalysis.MonitorList[currentControl].X = Program.CoreAnalysis.MonitorList[currentControl].X - 1;
-            if (Program.CoreAnalysis.MonitorList[currentControl].X < 0)
+            Program.CoreAnalysis.MonitorList[currentControl + _market].X = Program.CoreAnalysis.MonitorList[currentControl + _market].X - 1;
+            if (Program.CoreAnalysis.MonitorList[currentControl + _market].X < 0)
             {
-                Program.CoreAnalysis.MonitorList[currentControl].X = 0;
+                Program.CoreAnalysis.MonitorList[currentControl + _market].X = 0;
             }
             draw();
         }
@@ -182,7 +190,7 @@ namespace DzhMonitor
         }
         private void buttonRight_Click(object sender, EventArgs e)
         {
-            Program.CoreAnalysis.MonitorList[currentControl].X = Program.CoreAnalysis.MonitorList[currentControl].X + 1;
+            Program.CoreAnalysis.MonitorList[currentControl + _market].X = Program.CoreAnalysis.MonitorList[currentControl + _market].X + 1;
             draw();
         }
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -235,20 +243,20 @@ namespace DzhMonitor
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
-            Program.CoreAnalysis.MonitorList[currentControl].Width += 1;
+            Program.CoreAnalysis.MonitorList[currentControl + _market].Width += 1;
             draw();
         }
 
         private void numericUpDownHeight_ValueChanged(object sender, EventArgs e)
         {
             
-            Program.CoreAnalysis.MonitorList[currentControl].Height= int.Parse(numericUpDownHeight.Value.ToString());
+            Program.CoreAnalysis.MonitorList[currentControl + _market].Height= int.Parse(numericUpDownHeight.Value.ToString());
             draw();
         }
 
         private void numericUpDownWidth_ValueChanged(object sender, EventArgs e)
         {
-            Program.CoreAnalysis.MonitorList[currentControl].Width = int.Parse(numericUpDownWidth.Value.ToString());
+            Program.CoreAnalysis.MonitorList[currentControl + _market].Width = int.Parse(numericUpDownWidth.Value.ToString());
             draw();
         }
     }

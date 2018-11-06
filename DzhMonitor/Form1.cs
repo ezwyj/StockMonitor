@@ -59,6 +59,7 @@ namespace DzhMonitor
         private void buttonStart_Click(object sender, EventArgs e)
         {
             Program.Run = true;
+            this.TopMost = true;
             this.buttonStop.Enabled = true;
             this.buttonStart.Enabled = false;
             string stockName = "";
@@ -68,6 +69,7 @@ namespace DzhMonitor
             //FileStream fs = new FileStream(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"Data_{DateTime.Now:yyyyMMdd}.txt"), FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
             //StreamReader sr = new StreamReader (fs,Encoding.Default);
             StreamWriter writer1 = new StreamWriter(_file);
+            double MaxTs = 0;
             Task.Run(() =>
             {
                 
@@ -80,15 +82,17 @@ namespace DzhMonitor
                     var bmp0 = DeepCopyBitmap(bmp);
                     var bmp1 = DeepCopyBitmap(bmp);
                     var bmp2 = DeepCopyBitmap(bmp);
+                    var x = Program.CoreAnalysis.MarketList.SH.Contains(stockName) ? 3 : 0;
                     Parallel.Invoke(
                         () => {
                             if (radioButton0Local.Checked)
                             {
-                                v0 = Program.CoreAnalysis.CatImageAnalysis(bmp0, 0, out p0);
+                                
+                                v0 = Program.CoreAnalysis.CatImageAnalysis(bmp0, 0+x, out p0);
                             }
                             else
                             {
-                                v0 = Program.CoreAnalysis.CatImageAnalysis2(bmp0, 0, out p0);
+                                v0 = Program.CoreAnalysis.CatImageAnalysis2(bmp0, 0 + x, out p0);
                             }
                         }
                         , 
@@ -96,22 +100,22 @@ namespace DzhMonitor
                         {
                             if (radioButton1Local.Checked)
                             {
-                                v1 = Program.CoreAnalysis.CatImageAnalysis(bmp1, 1, out p1);
+                                v1 = Program.CoreAnalysis.CatImageAnalysis(bmp1, 1 + x, out p1);
                             }
                             else
                             {
-                                v1 = Program.CoreAnalysis.CatImageAnalysis2(bmp1, 1, out p1);
+                                v1 = Program.CoreAnalysis.CatImageAnalysis2(bmp1, 1 + x, out p1);
                             }
                         },
                         () =>
                         {
                             if (radioButton2Local.Checked)
                             {
-                                v2 = Program.CoreAnalysis.CatImageAnalysis(bmp2, 2, out p2);
+                                v2 = Program.CoreAnalysis.CatImageAnalysis(bmp2, 2 + x, out p2);
                             }
                             else
                             {
-                                v2 = Program.CoreAnalysis.CatImageAnalysis2(bmp2, 2, out p2);
+                                v2 = Program.CoreAnalysis.CatImageAnalysis2(bmp2, 2 + x, out p2);
                             }
                         }
                        
@@ -161,9 +165,15 @@ namespace DzhMonitor
             synchronizationContext.Send(a =>
             {
                 label7.Text = "花费时间：" + ts.TotalMilliseconds;
+                if(ts.TotalMilliseconds>MaxTs)
+
+                {
+                    MaxTs = ts.TotalMilliseconds;
+                    label8.Text = "最高花费时间：" + MaxTs.ToString();
+                }
                 this.Text = stockName;
-                //writer1.WriteLine("{0:yyyy-MM-dd HH:mm:ss},股票：{1}，买一价：{2}，买1量{3},买一笔数：{4}", DateTime.Now, stockName, v0, v1, v2);
-                //  writer1.Flush();
+                writer1.WriteLine("{0:yyyy-MM-dd HH:mm:ss},股票:{1}，买一价:{2}，买1量:{3},买一笔数:{4}", DateTime.Now, stockName, v0, v1, v2);
+                writer1.Flush();
             }, null);
             Thread.Sleep(1000);
             sw.Restart();
@@ -185,7 +195,7 @@ namespace DzhMonitor
             if (Program.CoreAnalysis.MarketList.SZ.Contains(this.Text))
             {
                 Cursor.Current = Cursors.WaitCursor;
-                Form2 w = new Form2();
+                Form2 w = new Form2("SZ");
                 w.ShowDialog();
                 Cursor.Current = Cursors.Default;
             }
@@ -201,10 +211,10 @@ namespace DzhMonitor
             string stockName = "";
             Program.CoreAnalysis.Screenshot(out stockName);
             this.Text = stockName;
-            if (Program.CoreAnalysis.MarketList.SH.Contains(this.Text.Replace(" ","")))
+            if (Program.CoreAnalysis.MarketList.SH.Contains(this.Text))
             {
                 Cursor.Current = Cursors.WaitCursor;
-                Form2 w = new Form2();
+                Form2 w = new Form2("SH");
                 w.ShowDialog();
                 Cursor.Current = Cursors.Default;
             }
@@ -216,7 +226,7 @@ namespace DzhMonitor
 
         private void buttonStop_Click(object sender, EventArgs e)
         {
-
+            this.TopMost = false;
             Program.Run = false;
             this.buttonStart.Enabled = true;
             this.buttonStop.Enabled = false;

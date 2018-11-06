@@ -38,6 +38,15 @@
             this.label10 = new System.Windows.Forms.Label();
             this.label20 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.radioButton2Baidu = new System.Windows.Forms.RadioButton();
+            this.radioButton2Local = new System.Windows.Forms.RadioButton();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.radioButton1Baidu = new System.Windows.Forms.RadioButton();
+            this.radioButton1Local = new System.Windows.Forms.RadioButton();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.radioButton0Baidu = new System.Windows.Forms.RadioButton();
+            this.radioButton0Local = new System.Windows.Forms.RadioButton();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.pictureBox0 = new System.Windows.Forms.PictureBox();
@@ -52,28 +61,20 @@
             this.buttonStop = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.radioButton0Local = new System.Windows.Forms.RadioButton();
-            this.radioButton0Baidu = new System.Windows.Forms.RadioButton();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.radioButton1Baidu = new System.Windows.Forms.RadioButton();
-            this.radioButton1Local = new System.Windows.Forms.RadioButton();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.radioButton2Baidu = new System.Windows.Forms.RadioButton();
-            this.radioButton2Local = new System.Windows.Forms.RadioButton();
+            this.label8 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.panel3.SuspendLayout();
+            this.panel2.SuspendLayout();
+            this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox0)).BeginInit();
-            this.panel1.SuspendLayout();
-            this.panel2.SuspendLayout();
-            this.panel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(231, 106);
+            this.button1.Location = new System.Drawing.Point(318, 116);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 0;
@@ -110,7 +111,9 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.buttonSZ);
+            this.groupBox1.Controls.Add(this.button3);
             this.groupBox1.Controls.Add(this.buttonSH);
+            this.groupBox1.Controls.Add(this.button2);
             this.groupBox1.Location = new System.Drawing.Point(7, 67);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(200, 78);
@@ -187,6 +190,99 @@
             this.groupBox2.TabIndex = 8;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "监控结果";
+            // 
+            // panel3
+            // 
+            this.panel3.Controls.Add(this.radioButton2Baidu);
+            this.panel3.Controls.Add(this.radioButton2Local);
+            this.panel3.Location = new System.Drawing.Point(288, 67);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(91, 50);
+            this.panel3.TabIndex = 18;
+            // 
+            // radioButton2Baidu
+            // 
+            this.radioButton2Baidu.AutoSize = true;
+            this.radioButton2Baidu.Checked = true;
+            this.radioButton2Baidu.Location = new System.Drawing.Point(3, 26);
+            this.radioButton2Baidu.Name = "radioButton2Baidu";
+            this.radioButton2Baidu.Size = new System.Drawing.Size(71, 16);
+            this.radioButton2Baidu.TabIndex = 17;
+            this.radioButton2Baidu.TabStop = true;
+            this.radioButton2Baidu.Text = "百度引擎";
+            this.radioButton2Baidu.UseVisualStyleBackColor = true;
+            // 
+            // radioButton2Local
+            // 
+            this.radioButton2Local.AutoSize = true;
+            this.radioButton2Local.Location = new System.Drawing.Point(3, 5);
+            this.radioButton2Local.Name = "radioButton2Local";
+            this.radioButton2Local.Size = new System.Drawing.Size(71, 16);
+            this.radioButton2Local.TabIndex = 16;
+            this.radioButton2Local.Text = "本地引擎";
+            this.radioButton2Local.UseVisualStyleBackColor = true;
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.radioButton1Baidu);
+            this.panel2.Controls.Add(this.radioButton1Local);
+            this.panel2.Location = new System.Drawing.Point(154, 67);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(99, 47);
+            this.panel2.TabIndex = 17;
+            // 
+            // radioButton1Baidu
+            // 
+            this.radioButton1Baidu.AutoSize = true;
+            this.radioButton1Baidu.Location = new System.Drawing.Point(14, 25);
+            this.radioButton1Baidu.Name = "radioButton1Baidu";
+            this.radioButton1Baidu.Size = new System.Drawing.Size(71, 16);
+            this.radioButton1Baidu.TabIndex = 15;
+            this.radioButton1Baidu.Text = "百度引擎";
+            this.radioButton1Baidu.UseVisualStyleBackColor = true;
+            // 
+            // radioButton1Local
+            // 
+            this.radioButton1Local.AutoSize = true;
+            this.radioButton1Local.Checked = true;
+            this.radioButton1Local.Location = new System.Drawing.Point(14, 5);
+            this.radioButton1Local.Name = "radioButton1Local";
+            this.radioButton1Local.Size = new System.Drawing.Size(71, 16);
+            this.radioButton1Local.TabIndex = 14;
+            this.radioButton1Local.TabStop = true;
+            this.radioButton1Local.Text = "本地引擎";
+            this.radioButton1Local.UseVisualStyleBackColor = true;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.radioButton0Baidu);
+            this.panel1.Controls.Add(this.radioButton0Local);
+            this.panel1.Location = new System.Drawing.Point(17, 67);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(99, 47);
+            this.panel1.TabIndex = 16;
+            // 
+            // radioButton0Baidu
+            // 
+            this.radioButton0Baidu.AutoSize = true;
+            this.radioButton0Baidu.Checked = true;
+            this.radioButton0Baidu.Location = new System.Drawing.Point(5, 25);
+            this.radioButton0Baidu.Name = "radioButton0Baidu";
+            this.radioButton0Baidu.Size = new System.Drawing.Size(71, 16);
+            this.radioButton0Baidu.TabIndex = 12;
+            this.radioButton0Baidu.TabStop = true;
+            this.radioButton0Baidu.Text = "百度引擎";
+            this.radioButton0Baidu.UseVisualStyleBackColor = true;
+            // 
+            // radioButton0Local
+            // 
+            this.radioButton0Local.AutoSize = true;
+            this.radioButton0Local.Location = new System.Drawing.Point(5, 3);
+            this.radioButton0Local.Name = "radioButton0Local";
+            this.radioButton0Local.Size = new System.Drawing.Size(71, 16);
+            this.radioButton0Local.TabIndex = 11;
+            this.radioButton0Local.Text = "本地引擎";
+            this.radioButton0Local.UseVisualStyleBackColor = true;
             // 
             // pictureBox2
             // 
@@ -278,7 +374,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(229, 71);
+            this.label7.Location = new System.Drawing.Point(229, 49);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(41, 12);
             this.label7.TabIndex = 9;
@@ -297,7 +393,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(340, 71);
+            this.button2.Location = new System.Drawing.Point(9, 20);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 11;
@@ -307,7 +403,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(340, 106);
+            this.button3.Location = new System.Drawing.Point(108, 20);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 12;
@@ -315,106 +411,21 @@
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
-            // panel1
+            // label8
             // 
-            this.panel1.Controls.Add(this.radioButton0Baidu);
-            this.panel1.Controls.Add(this.radioButton0Local);
-            this.panel1.Location = new System.Drawing.Point(17, 67);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(99, 47);
-            this.panel1.TabIndex = 16;
-            // 
-            // radioButton0Local
-            // 
-            this.radioButton0Local.AutoSize = true;
-            this.radioButton0Local.Location = new System.Drawing.Point(5, 3);
-            this.radioButton0Local.Name = "radioButton0Local";
-            this.radioButton0Local.Size = new System.Drawing.Size(71, 16);
-            this.radioButton0Local.TabIndex = 11;
-            this.radioButton0Local.Text = "本地引擎";
-            this.radioButton0Local.UseVisualStyleBackColor = true;
-            // 
-            // radioButton0Baidu
-            // 
-            this.radioButton0Baidu.AutoSize = true;
-            this.radioButton0Baidu.Checked = true;
-            this.radioButton0Baidu.Location = new System.Drawing.Point(5, 25);
-            this.radioButton0Baidu.Name = "radioButton0Baidu";
-            this.radioButton0Baidu.Size = new System.Drawing.Size(71, 16);
-            this.radioButton0Baidu.TabIndex = 12;
-            this.radioButton0Baidu.TabStop = true;
-            this.radioButton0Baidu.Text = "百度引擎";
-            this.radioButton0Baidu.UseVisualStyleBackColor = true;
-            // 
-            // panel2
-            // 
-            this.panel2.Controls.Add(this.radioButton1Baidu);
-            this.panel2.Controls.Add(this.radioButton1Local);
-            this.panel2.Location = new System.Drawing.Point(154, 67);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(99, 47);
-            this.panel2.TabIndex = 17;
-            // 
-            // radioButton1Baidu
-            // 
-            this.radioButton1Baidu.AutoSize = true;
-            this.radioButton1Baidu.Location = new System.Drawing.Point(14, 25);
-            this.radioButton1Baidu.Name = "radioButton1Baidu";
-            this.radioButton1Baidu.Size = new System.Drawing.Size(71, 16);
-            this.radioButton1Baidu.TabIndex = 15;
-            this.radioButton1Baidu.Text = "百度引擎";
-            this.radioButton1Baidu.UseVisualStyleBackColor = true;
-            // 
-            // radioButton1Local
-            // 
-            this.radioButton1Local.AutoSize = true;
-            this.radioButton1Local.Checked = true;
-            this.radioButton1Local.Location = new System.Drawing.Point(14, 5);
-            this.radioButton1Local.Name = "radioButton1Local";
-            this.radioButton1Local.Size = new System.Drawing.Size(71, 16);
-            this.radioButton1Local.TabIndex = 14;
-            this.radioButton1Local.TabStop = true;
-            this.radioButton1Local.Text = "本地引擎";
-            this.radioButton1Local.UseVisualStyleBackColor = true;
-            // 
-            // panel3
-            // 
-            this.panel3.Controls.Add(this.radioButton2Baidu);
-            this.panel3.Controls.Add(this.radioButton2Local);
-            this.panel3.Location = new System.Drawing.Point(288, 67);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(91, 50);
-            this.panel3.TabIndex = 18;
-            // 
-            // radioButton2Baidu
-            // 
-            this.radioButton2Baidu.AutoSize = true;
-            this.radioButton2Baidu.Checked = true;
-            this.radioButton2Baidu.Location = new System.Drawing.Point(3, 26);
-            this.radioButton2Baidu.Name = "radioButton2Baidu";
-            this.radioButton2Baidu.Size = new System.Drawing.Size(71, 16);
-            this.radioButton2Baidu.TabIndex = 17;
-            this.radioButton2Baidu.TabStop = true;
-            this.radioButton2Baidu.Text = "百度引擎";
-            this.radioButton2Baidu.UseVisualStyleBackColor = true;
-            // 
-            // radioButton2Local
-            // 
-            this.radioButton2Local.AutoSize = true;
-            this.radioButton2Local.Location = new System.Drawing.Point(3, 5);
-            this.radioButton2Local.Name = "radioButton2Local";
-            this.radioButton2Local.Size = new System.Drawing.Size(71, 16);
-            this.radioButton2Local.TabIndex = 16;
-            this.radioButton2Local.Text = "本地引擎";
-            this.radioButton2Local.UseVisualStyleBackColor = true;
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(229, 76);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(41, 12);
+            this.label8.TabIndex = 13;
+            this.label8.Text = "label8";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(429, 358);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
+            this.Controls.Add(this.label8);
             this.Controls.Add(this.buttonStop);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.groupBox2);
@@ -427,20 +438,19 @@
             this.Controls.Add(this.button1);
             this.Name = "Form1";
             this.Text = "监控";
-            this.TopMost = true;
             this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox0)).EndInit();
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
-            this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
-            this.panel3.ResumeLayout(false);
-            this.panel3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -481,6 +491,7 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.RadioButton radioButton0Baidu;
         private System.Windows.Forms.RadioButton radioButton0Local;
+        private System.Windows.Forms.Label label8;
     }
 }
 

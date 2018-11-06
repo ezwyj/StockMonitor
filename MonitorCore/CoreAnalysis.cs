@@ -72,7 +72,22 @@ namespace MonitorCore
                 three.Height = 20;
                 three.Name = "买一笔";
                 _monitorList.Add(three);
-            
+            var four = new MonitorLocation();
+            four.Width = 40;
+            four.Height = 20;
+            four.Name = "买一价";
+            _monitorList.Add(four);
+            var five = new MonitorLocation();
+            five.Width = 40;
+            five.Height = 20;
+            five.Name = "买一量";
+            _monitorList.Add(five);
+            var six = new MonitorLocation();
+            six.Width = 30;
+            six.Height = 20;
+            six.Name = "买一笔";
+            _monitorList.Add(six);
+
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
             sb.Append(System.IO.File.ReadAllText(Application.StartupPath + @"\stocklist.json", System.Text.Encoding.Default));
             MarketList = Newtonsoft.Json.JsonConvert.DeserializeObject<Market>(sb.ToString());
@@ -152,10 +167,10 @@ namespace MonitorCore
         private IntPtr hBitmap, hMemDc, hScrDc;
         private int appProcessId = 0;
 
-        public void SetMonitorLocation(List<MonitorLocation> monitorList)
-        {
-            _monitorList = monitorList;
-        }
+        //public void SetMonitorLocation(List<MonitorLocation> monitorList)
+        //{
+        //    _monitorList = monitorList;
+        //}
 
         /// <summary>
         /// 图
@@ -177,63 +192,7 @@ namespace MonitorCore
             return bmp;
         }
 
-        /// <summary>
-        /// 版面分析
-        /// </summary>
-        private void LayoutAnalysis(string pathName)
-        {
-            var client = new Baidu.Aip.Ocr.Ocr(BaiduHelper.API_KEY, BaiduHelper.SECRET_KEY);
-
-            //导入定位图片
-            var image = File.ReadAllBytes(pathName);
-
-            //定位“委买队列”
-            // 调用通用文字识别, 图片参数为本地图片，可能会抛出网络等异常，请使用try/catch捕获
-            var options = new Dictionary<string, object>{
-                    {"recognize_granularity", "big"},
-                    {"language_type", "CHN_ENG"},
-                    {"detect_direction", "true"},
-                    {"detect_language", "true"},
-                    {"vertexes_location", "true"},
-                    {"probability", "true"}
-                };
-            try
-            {
-
-            
-            // 带参数调用通用文字识别（含位置信息版）, 图片参数为本地图片
-                var result = client.General(image, options);
-                var show = result["words_result"].ToList();
-                var basic = show.Where(a => a["words"].ToString().StartsWith("委买队列")).FirstOrDefault();
-                if (basic == null)
-                {
-                    //二次高精度
-                    var AccurateOptions = new Dictionary<string, object>{
-                        {"recognize_granularity", "big"},
-                        {"detect_direction", "true"},
-                        {"vertexes_location", "true"},
-                        {"probability", "true"}
-                    };
-                    result = client.Accurate(image, AccurateOptions);
-                    show = result["words_result"].ToList();
-                    basic = show.Where(a => a["words"].ToString().StartsWith("委买队列")).FirstOrDefault();
-                }
-                if (basic == null)
-                {
-                    throw new Exception("分析失败");
-                }
-                int width = Convert.ToUInt16(basic["location"]["width"].ToString());
-                int height = Convert.ToUInt16(basic["location"]["height"].ToString());
-                int x = Convert.ToUInt16(basic["location"]["left"].ToString());
-                int y = Convert.ToUInt16(basic["location"]["top"].ToString());
-
-            }
-            catch(Exception e)
-            {
-                throw e;
-            }
-        }
-
+       
 
         public string CatImageAnalysis(Bitmap bmp, int i,out Bitmap catedImage)
         {
@@ -244,7 +203,7 @@ namespace MonitorCore
             rectangle.Height = Convert.ToInt16( _monitorList[i].Height);
             catedImage = bmp.Clone(rectangle, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             //catedImage.Save(Application.StartupPath +"\\save\\"+i.ToString() +"_" + DateTime.Now.ToString("yyyyMMddhhmmssffff") + ".png");
-            var page = OcrEngine[i].Process(catedImage);
+            var page = OcrEngine[i>2?i-3:i].Process(catedImage);
             
             var text = page.GetText().Replace("\n","");
             page.Dispose();
@@ -275,7 +234,7 @@ namespace MonitorCore
                         {"probability", "true"}
                 };
                 // 带参数调用通用文字识别（含位置信息版）, 图片参数为本地图片
-                var result = OcrEngine2[i].GeneralBasic (data, options);
+                var result = OcrEngine2[i > 2 ? i - 3 : i].GeneralBasic (data, options);
                 if (result["words_result"].Count()>0)
                 {
                     text = result["words_result"][0]["words"].ToString();
