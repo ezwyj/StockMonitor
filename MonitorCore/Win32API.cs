@@ -104,6 +104,19 @@ namespace MonitorCore
         public static extern int GetWindowTextW(IntPtr hWnd, [MarshalAs(UnmanagedType.LPWStr)]StringBuilder lpString, int nMaxCount);
         [DllImport("user32.dll")]
         public static extern int GetClassNameW(IntPtr hWnd, [MarshalAs(UnmanagedType.LPWStr)]StringBuilder lpString, int nMaxCount);
+
+        [DllImport("user32.dll")]
+        public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+
+        public const int WM_KEYDOWN = 0X100;
+        public const int WM_KEYUP = 0X101;
+        public const int WM_SYSCHAR = 0X106;
+        public const int WM_SYSKEYUP = 0X105;
+        public const int WM_SYSKEYDOWN = 0X104;
+        public const int WM_CHAR = 0X102;
+
+        [DllImport("User32.dll")]
+        public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
     }
 
 }

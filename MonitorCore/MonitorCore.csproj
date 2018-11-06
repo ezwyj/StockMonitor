@@ -61,6 +61,7 @@
     <Compile Include="CoreAnalysis.cs" />
     <Compile Include="Entity\Market.cs" />
     <Compile Include="Entity\MonitorLocation.cs" />
+    <Compile Include="KeyBoard.cs" />
     <Compile Include="ProcessEx.cs" />
     <Compile Include="Win32API.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

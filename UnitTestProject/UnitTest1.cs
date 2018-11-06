@@ -4,6 +4,8 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
+using System.Windows.Forms;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MonitorCore;
 using Tesseract;
@@ -173,5 +175,12 @@ namespace UnitTestProject
             // Draw the modified image.绘制更新了的位图  
             bmp.Save(@"f:\byj\pic\md2.png");
         }
+
+        [TestMethod]
+        public void TestMethod4()
+        {
+            
+        }
+       
     }
 }

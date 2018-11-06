@@ -16,12 +16,13 @@ namespace MonitorCore
 {
     public class CoreAnalysis
     {
-
+        //158 14702966  6Lc2ZkIFFQA5DOMQlw6jIjLU  YEV4EbT6q7Zz79Ivk20vbE8XYrebF4o1
         public Market MarketList { get; set; }
         private List<Entity.MonitorLocation> _monitorList;
         public static List<TesseractEngine> OcrEngine { get; set; }
-        
-        private IntPtr AppMainHandler = IntPtr.Zero;
+        public static List<Baidu.Aip.Ocr.Ocr> OcrEngine2 { get; set; }
+
+        public IntPtr AppMainHandler = IntPtr.Zero;
         
         public List<Entity.MonitorLocation> MonitorList
         {
@@ -34,6 +35,7 @@ namespace MonitorCore
         public CoreAnalysis()
         {
             OcrEngine = new List<TesseractEngine>(3);
+            OcrEngine2 = new List<Baidu.Aip.Ocr.Ocr>(3);
             _monitorList = new List<MonitorLocation>();
 
             var te0 = new TesseractEngine("./tessdata", "eng", EngineMode.CubeOnly);
@@ -44,9 +46,16 @@ namespace MonitorCore
             te1.SetVariable("tessedit_char_whitelist", "0123456789");
             OcrEngine.Add(te1);
 
-            var te2 = new TesseractEngine("./tessdata", "chi_sim", EngineMode.CubeOnly);
-            te2.SetVariable("tessedit_char_whitelist", "0123456789笔");
+            var te2 = new TesseractEngine("./tessdata", "eng", EngineMode.CubeOnly);
+            te2.SetVariable("tessedit_char_whitelist", "0123456789");
             OcrEngine.Add(te2);
+
+            var client0 = new Baidu.Aip.Ocr.Ocr(BaiduHelper.API_KEY, BaiduHelper.SECRET_KEY);
+            OcrEngine2.Add(client0);
+            var client1 = new Baidu.Aip.Ocr.Ocr(BaiduHelper.API_KEY2, BaiduHelper.SECRET_KEY2);
+            OcrEngine2.Add(client1);
+            var client2= new Baidu.Aip.Ocr.Ocr(BaiduHelper.API_KEY, BaiduHelper.SECRET_KEY);
+            OcrEngine2.Add(client2);
 
             var one = new MonitorLocation();
                 one.Width = 40;
@@ -130,8 +139,8 @@ namespace MonitorCore
             hScrDc = Win32API.GetWindowDC(AppMainHandler);
             Win32API.RECT windowRect = new Win32API.RECT();
             Win32API.GetWindowRect(AppMainHandler, ref windowRect);
-            int width = Convert.ToInt16(Math.Abs(windowRect.Right - windowRect.Left) * 1.25);
-            int height = Convert.ToInt16(Math.Abs(windowRect.Bottom - windowRect.Top) *1.25 ); 
+            int width = Convert.ToInt16(Math.Abs(windowRect.Right - windowRect.Left) );
+            int height = Convert.ToInt16(Math.Abs(windowRect.Bottom - windowRect.Top) ); 
             hBitmap = Win32API.CreateCompatibleBitmap(hScrDc, width, height);
             hMemDc = Win32API.CreateCompatibleDC(hScrDc);
             if (width < 300)
@@ -226,25 +235,61 @@ namespace MonitorCore
         }
 
 
-        public string CatImageAnalysis(Bitmap bmp, int i)
+        public string CatImageAnalysis(Bitmap bmp, int i,out Bitmap catedImage)
         {
             System.Drawing.Rectangle rectangle = new Rectangle();
             rectangle.X = Convert.ToInt16(_monitorList[i].X );
             rectangle.Y = Convert.ToInt16(_monitorList[i].Y );
             rectangle.Width = Convert.ToInt16(  _monitorList[i].Width);
             rectangle.Height = Convert.ToInt16( _monitorList[i].Height);
-            Bitmap catedImage = bmp.Clone(rectangle, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            catedImage.Save(Application.StartupPath +"\\save\\"+i.ToString() +"_" + DateTime.Now.ToString("yyyyMMddhhmmssffff") + ".png");
+            catedImage = bmp.Clone(rectangle, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            //catedImage.Save(Application.StartupPath +"\\save\\"+i.ToString() +"_" + DateTime.Now.ToString("yyyyMMddhhmmssffff") + ".png");
             var page = OcrEngine[i].Process(catedImage);
             
-            var text = page.GetText().Replace("\n","").Replace("T","7").Replace("S","9").Replace("I","1");
+            var text = page.GetText().Replace("\n","");
             page.Dispose();
-            catedImage.Dispose();
+            //catedImage.Dispose();
             return text;
         }
+        public string CatImageAnalysis2(Bitmap bmp, int i, out Bitmap catedImage)
+        {
+            
+            System.Drawing.Rectangle rectangle = new Rectangle();
+            rectangle.X = Convert.ToInt16(_monitorList[i].X);
+            rectangle.Y = Convert.ToInt16(_monitorList[i].Y);
+            rectangle.Width = Convert.ToInt16(_monitorList[i].Width);
+            rectangle.Height = Convert.ToInt16(_monitorList[i].Height);
+            catedImage = bmp.Clone(rectangle, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            string text = string.Empty;
+            using (MemoryStream stream = new MemoryStream())
+            {
+                catedImage.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+                byte[] data = new byte[stream.Length];
+                stream.Seek(0, SeekOrigin.Begin);
+                stream.Read(data, 0, Convert.ToInt32(stream.Length));
+                // 调用通用文字识别, 图片参数为本地图片，可能会抛出网络等异常，请使用try/catch捕获
+                var options = new Dictionary<string, object>{
+                       {"language_type", "CHN_ENG"},
+                        {"detect_direction", "true"},
+                        {"detect_language", "true"},
+                        {"probability", "true"}
+                };
+                // 带参数调用通用文字识别（含位置信息版）, 图片参数为本地图片
+                var result = OcrEngine2[i].GeneralBasic (data, options);
+                if (result["words_result"].Count()>0)
+                {
+                    text = result["words_result"][0]["words"].ToString();
+                }
+                
+               
+            }
+            return text;
 
-        
 
-        
+        }
+
+
+
+
     }
 }

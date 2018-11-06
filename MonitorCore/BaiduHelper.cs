@@ -25,6 +25,22 @@ namespace MonitorCore
                 return "pyik6Od7p1kgnL4BdX3MefAqjHM2SNHd";
             }
         }
+
+        public static string APP_ID2 { get { return "14702966"; } }
+        public static string API_KEY2
+        {
+            get
+            {
+                return "6Lc2ZkIFFQA5DOMQlw6jIjLU";
+            }
+        }
+        public static string SECRET_KEY2
+        {
+            get
+            {
+                return "YEV4EbT6q7Zz79Ivk20vbE8XYrebF4o1";
+            }
+        }
         // 调用getAccessToken()获取的 access_token建议根据expires_in 时间 设置缓存
         // 返回token示例
         public static String TOKEN = "";
